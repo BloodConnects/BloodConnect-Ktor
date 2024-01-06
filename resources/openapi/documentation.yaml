@@ -1,0 +1,8 @@
+openapi: "3.0.3"
+info:
+  title: "RaktaCare API"
+  description: "RaktaCare API"
+  version: "1.0.0"
+servers:
+- url: "https://RaktaCare"
+paths: {}
