@@ -1,5 +1,6 @@
 package com.raktacare.module.user
 
+import com.raktacare.ifNotEmpty
 import com.raktacare.plugins.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -19,6 +20,9 @@ class UserDaoImpl : UserDao {
             it[mailAddress] = user.mailAddress
             it[bloodGroup] = user.bloodGroup
             it[gender] = user.gender
+            it[birthDate] = user.birthDate
+            it[weight] = user.weight
+            it[locationKey] = user.locationKey
             it[profilePictureUrl] = user.profilePictureUrl
             it[deviceToken] = user.deviceToken
             it[userToken] = user.userToken
@@ -28,15 +32,15 @@ class UserDaoImpl : UserDao {
 
     override suspend fun updateUser(user: User) = dbQuery {
         Users.update({ Users.uid eq user.uid }) {
-            if (user.fullName.isNotBlank()) it[fullName] = user.fullName
-            if (user.countryCode.isNotBlank()) it[countryCode] = user.countryCode
-            if (user.mobileNumber.isNotBlank()) it[mobileNumber] = user.mobileNumber
-            if (user.mailAddress.isNotBlank()) it[mailAddress] = user.mailAddress
+            user.fullName.ifNotEmpty { value -> it[fullName] = value }
+            user.countryCode.ifNotEmpty { value -> it[countryCode] = value }
+            user.mobileNumber.ifNotEmpty { value -> it[mobileNumber] = value }
+            user.mailAddress.ifNotEmpty { value -> it[mailAddress] = value }
+            user.profilePictureUrl.ifNotEmpty { value -> it[profilePictureUrl] = value }
+            user.deviceToken.ifNotEmpty { value -> it[deviceToken] = value }
+            user.userToken.ifNotEmpty { value -> it[userToken] = value }
             if (user.bloodGroup != User.BloodGroup.unknown) it[bloodGroup] = user.bloodGroup
             if (user.gender != User.Gender.Other) it[gender] = user.gender
-            if (user.profilePictureUrl.isNotBlank()) it[profilePictureUrl] = user.profilePictureUrl
-            if (user.deviceToken.isNotBlank()) it[deviceToken] = user.deviceToken
-            if (user.userToken.isNotBlank()) it[userToken] = user.userToken
         } > 0
     }
 
@@ -73,6 +77,9 @@ class UserDaoImpl : UserDao {
         this[Users.mailAddress],
         this[Users.bloodGroup],
         this[Users.gender],
+        this[Users.birthDate],
+        this[Users.weight],
+        this[Users.locationKey],
         this[Users.profilePictureUrl],
         this[Users.deviceToken],
         this[Users.userToken]

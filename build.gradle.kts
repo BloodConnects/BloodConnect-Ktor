@@ -4,6 +4,7 @@ val logback_version: String by project
 
 val postgres_version: String by project
 val h2_version: String by project
+
 plugins {
     kotlin("jvm") version "1.9.22"
     id("io.ktor.plugin") version "2.3.7"
@@ -15,7 +16,6 @@ version = "0.0.1"
 
 application {
     mainClass.set("com.raktacare.ApplicationKt")
-
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }

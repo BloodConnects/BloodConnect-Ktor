@@ -12,10 +12,9 @@ fun Application.configureDatabases() {
 
     Class.forName("org.postgresql.Driver")
     val driverClassName = "org.postgresql.Driver"
-    val jdbcURL = environment.config.property("postgres.url").getString()
-    val user = environment.config.property("postgres.user").getString()
-    val password = environment.config.property("postgres.password").getString()
-
+    val jdbcURL = environment.config.property("ktor.postgres.url").getString()
+    val user = environment.config.property("ktor.postgres.user").getString()
+    val password = environment.config.property("ktor.postgres.password").getString()
     val database = Database.connect(jdbcURL, driverClassName, user, password)
     transaction(database) {
         SchemaUtils.create(Users)

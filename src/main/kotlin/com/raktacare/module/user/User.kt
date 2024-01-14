@@ -14,6 +14,9 @@ data class User(
     val mailAddress: String = "",
     val bloodGroup: BloodGroup = BloodGroup.unknown,
     val gender: Gender = Gender.Other,
+    val birthDate: Long = 0,
+    val weight: Double = 0.0,
+    val locationKey: String = "",
     val profilePictureUrl: String = "",
     val deviceToken: String = "",
     val userToken: String = ""
@@ -83,6 +86,24 @@ data class User(
                 unknown -> Users.bloodGroup eq unknown
             }
         }
+    }
 
+}
+
+@Serializable
+data class Location(
+    val locationKey: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    val address: String = "",
+    val city: String = "",
+    val state: String = "",
+    val country: String = "",
+    val postalCode: String = "",
+    val type: Type = Type.HOME
+) {
+    @Serializable
+    enum class Type {
+        HOME, CURRENT
     }
 }
