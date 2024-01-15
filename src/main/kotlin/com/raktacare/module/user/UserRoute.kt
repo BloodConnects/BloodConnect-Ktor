@@ -92,6 +92,9 @@ fun Route.userRoute() {
                         user.mobileNumber.ifEmpty { user = user.copy(mobileNumber = it.mobileNumber) }
                         user.countryCode.ifEmpty { user = user.copy(countryCode = it.countryCode) }
                         user.mailAddress.ifEmpty { user = user.copy(mailAddress = it.mailAddress) }
+                        if(user.birthDate==0L) { user = user.copy(birthDate = it.birthDate) }
+                        if(user.weight==0.0) { user = user.copy(weight = it.weight) }
+                        user.locationKey.ifEmpty { user = user.copy(locationKey = it.locationKey) }
                         user.profilePictureUrl.ifEmpty { user = user.copy(profilePictureUrl = it.profilePictureUrl) }
                         user.deviceToken.ifEmpty { user = user.copy(deviceToken = it.deviceToken) }
                         user.userToken.ifEmpty { user = user.copy(userToken = it.userToken) }

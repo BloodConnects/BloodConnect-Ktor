@@ -1,5 +1,6 @@
 package com.raktacare.plugins
 
+import com.raktacare.module.location.Locations
 import com.raktacare.module.user.Users
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ fun Application.configureDatabases() {
     val password = environment.config.property("ktor.postgres.password").getString()
     val database = Database.connect(jdbcURL, driverClassName, user, password)
     transaction(database) {
-        SchemaUtils.create(Users)
+        SchemaUtils.create(Users, Locations)
     }
 }
 
