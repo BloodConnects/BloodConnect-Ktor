@@ -1,5 +1,6 @@
 package com.raktacare.module.user
 
+import com.raktacare.module.location.Location
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -17,6 +18,7 @@ data class User(
     val birthDate: Long = 0,
     val weight: Double = 0.0,
     val locationKey: String = "",
+    val location: Location? = null,
     val profilePictureUrl: String = "",
     val deviceToken: String = "",
     val userToken: String = ""

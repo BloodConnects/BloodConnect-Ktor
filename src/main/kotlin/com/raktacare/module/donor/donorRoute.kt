@@ -25,7 +25,13 @@ fun Routing.donorRoute() {
         post {
             try {
                 val query = call.receive<DonorPagination>()
-                call.respond(BaseResponse(success = true, message = "Donor List", data = getDonors(query, userDao, locationDao)))
+                call.respond(
+                    BaseResponse(
+                        success = true,
+                        message = "Donor List",
+                        data = getDonors(query, userDao, locationDao)
+                    )
+                )
             } catch (e: Exception) {
                 call.respond(BaseResponse(success = false, message = e.message ?: "Internal Server Error", data = null))
                 e.printStackTrace()
@@ -38,23 +44,31 @@ fun Routing.donorRoute() {
 suspend fun getDonors(query: DonorPagination, userDao: UserDaoImpl, locationDao: LocationDaoImpl): List<User> {
     if (query.bloodGroup != null && query.location != null) {
         return userDao.getUserByBloodRequest(query.bloodGroup).filter { user ->
-            locationDao.getLocationByLocationKey(user.locationKey)?.let { location->
+            locationDao.getLocationByLocationKey(user.locationKey)?.let { location ->
                 location.city == query.location.city && location.state == query.location.state && location.country == query.location.country
-            }?: run {
+            } ?: run {
                 false
             }
-        }.toPage(query)
+        }.toPage(query).map {
+            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey))
+        }
     } else if (query.bloodGroup != null) {
-        return userDao.getUserByBloodRequest(query.bloodGroup).toPage(query)
+        return userDao.getUserByBloodRequest(query.bloodGroup).toPage(query).map {
+            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey))
+        }
     } else if (query.location != null) {
         return userDao.getUsers().filter { user ->
-            locationDao.getLocationByLocationKey(user.locationKey)?.let { location->
+            locationDao.getLocationByLocationKey(user.locationKey)?.let { location ->
                 location.city == query.location.city && location.state == query.location.state && location.country == query.location.country
-            }?: run {
+            } ?: run {
                 false
             }
-        }.toPage(query)
+        }.toPage(query).map {
+            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey))
+        }
     } else {
-        return userDao.getUsers().toPage(query)
+        return userDao.getUsers().toPage(query).map {
+            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey))
+        }
     }
 }

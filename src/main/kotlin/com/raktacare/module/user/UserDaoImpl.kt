@@ -72,19 +72,19 @@ class UserDaoImpl : UserDao {
     }
 
     private fun ResultRow.toUser() = User(
-        this[Users.uid],
-        this[Users.fullName],
-        this[Users.countryCode],
-        this[Users.mobileNumber],
-        this[Users.mailAddress],
-        this[Users.bloodGroup],
-        this[Users.gender],
-        this[Users.birthDate],
-        this[Users.weight],
-        this[Users.locationKey],
-        this[Users.profilePictureUrl],
-        this[Users.deviceToken],
-        this[Users.userToken]
+        uid = this[Users.uid],
+        fullName = this[Users.fullName],
+        countryCode = this[Users.countryCode],
+        mobileNumber = this[Users.mobileNumber],
+        mailAddress = this[Users.mailAddress],
+        bloodGroup = this[Users.bloodGroup],
+        gender = this[Users.gender],
+        birthDate = this[Users.birthDate],
+        weight = this[Users.weight],
+        locationKey = this[Users.locationKey],
+        profilePictureUrl = this[Users.profilePictureUrl],
+        deviceToken = this[Users.deviceToken],
+        userToken = this[Users.userToken]
     )
 
 }

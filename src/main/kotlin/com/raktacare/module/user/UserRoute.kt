@@ -3,6 +3,7 @@ package com.raktacare.module.user
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.raktacare.module.BaseResponse
+import com.raktacare.module.location.LocationDaoImpl
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -100,6 +101,12 @@ fun Route.userRoute() {
                         user.userToken.ifEmpty { user = user.copy(userToken = it.userToken) }
                         if (user.bloodGroup==User.BloodGroup.unknown) user = user.copy(bloodGroup = it.bloodGroup)
                         if (user.gender==User.Gender.Other) user = user.copy(gender = it.gender)
+                    }?: run {
+                        call.respond(
+                            HttpStatusCode.NotFound,
+                            BaseResponse(success = false, message = "User Not Found", data = null)
+                        )
+                        return@put
                     }
                     if (userDao.updateUser(user)) {
                         call.respond(BaseResponse(success = true, message = "User Update Successfully", data = user))

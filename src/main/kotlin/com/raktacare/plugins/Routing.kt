@@ -5,6 +5,7 @@ import com.raktacare.module.BaseResponse
 import com.raktacare.module.donor.donorRoute
 import com.raktacare.module.location.Location
 import com.raktacare.module.location.LocationDaoImpl
+import com.raktacare.module.location.locationRoute
 import com.raktacare.module.user.User
 import com.raktacare.module.user.UserDaoImpl
 import com.raktacare.module.user.userRoute
@@ -21,6 +22,7 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
         userRoute()
+        locationRoute()
         donorRoute()
     }
 }
