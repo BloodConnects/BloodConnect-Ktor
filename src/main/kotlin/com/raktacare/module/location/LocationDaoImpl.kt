@@ -24,6 +24,9 @@ class LocationDaoImpl : LocationDao {
             it[locationKey] = location.locationKey
             it[latitude] = location.latitude
             it[longitude] = location.longitude
+            it[userUid] = location.userUid
+            it[houseNo] = location.userUid
+            it[street] = location.street
             it[address] = location.address
             it[city] = location.city
             it[state] = location.state
@@ -38,6 +41,9 @@ class LocationDaoImpl : LocationDao {
         Locations.update({ Locations.locationKey eq location.locationKey }) {
             it[latitude] = location.latitude
             it[longitude] = location.longitude
+            it[userUid] = location.userUid
+            it[houseNo] = location.userUid
+            it[street] = location.street
             it[address] = location.address
             it[city] = location.city
             it[state] = location.state
@@ -63,10 +69,17 @@ class LocationDaoImpl : LocationDao {
         Locations.select { Locations.city eq city }.map { it.toLocation() }
     }
 
+    override suspend fun getLocationByUser(userUid: String) = dbQuery {
+        Locations.select { Locations.userUid eq userUid }.firstOrNull()?.toLocation()
+    }
+
     private fun ResultRow.toLocation() = Location(
         locationKey = this[Locations.locationKey],
+        userUid = this[Locations.userUid],
         latitude = this[Locations.latitude],
         longitude = this[Locations.longitude],
+        houseNo = this[Locations.houseNo],
+        street = this[Locations.street],
         address = this[Locations.address],
         city = this[Locations.city],
         state = this[Locations.state],

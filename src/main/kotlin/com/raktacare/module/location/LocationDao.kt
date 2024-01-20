@@ -8,4 +8,5 @@ interface LocationDao {
     suspend fun getLocations(): List<Location>
     suspend fun getLocationByLocationKey(locationKey: String): Location?
     suspend fun getLocationByCity(city: String): List<Location>
+    suspend fun getLocationByUser(userUid: String): Location?
 }

@@ -3,7 +3,6 @@ package com.raktacare.module.user
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.raktacare.module.BaseResponse
-import com.raktacare.module.location.LocationDaoImpl
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,6 +16,72 @@ import java.util.*
 fun Route.userRoute() {
     val userDao = UserDaoImpl()
     route("User") {
+
+        post("/Check") {
+            try {
+                val user = call.receive<User>()
+                if ((user.mobileNumber.isEmpty() || user.countryCode.isEmpty()) && user.uid.isEmpty()) {
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        BaseResponse(success = false, message = "Mobile Number or Country Code or UID is Empty", data = null)
+                    )
+                    return@post
+                }
+                if (user.uid.isNotEmpty()) {
+                    userDao.getUserByUID(user.uid)?.let {
+                        call.respond(BaseResponse(success = true, message = "User Already Exist", data = null))
+                    } ?: run {
+                        call.respond(BaseResponse(success = false, message = "User Not Found", data = null))
+                    }
+                    return@post
+                }
+                userDao.getUserByMobileNumber(user.mobileNumber, user.countryCode)?.let {
+                    call.respond(BaseResponse(success = true, message = "User Already Exist", data = null))
+                } ?: run {
+                    call.respond(BaseResponse(success = false, message = "User Not Found", data = null))
+                }
+            } catch (e: Exception) {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    BaseResponse(success = false, message = e.message?:"Internal Server Error", data = null)
+                )
+                e.printStackTrace()
+            }
+        }
+
+        post("/Login") {
+            try {
+                val user = call.receive<User>()
+                if ((user.mobileNumber.isEmpty() || user.countryCode.isEmpty()) && user.uid.isEmpty()) {
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        BaseResponse(success = false, message = "Mobile Number or Country Code or UID is Empty", data = null)
+                    )
+                    return@post
+                }
+                if (user.uid.isNotEmpty()) {
+                    userDao.getUserByUID(user.uid)?.let {
+                        call.respond(BaseResponse(success = true, message = "User Login Successfully", data = it))
+                    } ?: run {
+                        call.respond(BaseResponse(success = false, message = "User Not Found", data = null))
+                    }
+                    return@post
+                }
+                userDao.getUserByUID(user.uid)?.let {
+                    call.respond(BaseResponse(success = true, message = "User Login Successfully", data = it))
+                } ?: run {
+                    call.respond(BaseResponse(success = false, message = "User Not Found", data = null))
+                }
+            } catch (e: Exception) {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    BaseResponse(success = false, message = e.message?:"Internal Server Error", data = null)
+                )
+                e.printStackTrace()
+            }
+
+        }
+
         post {
             try {
                 var user = call.receive<User>()

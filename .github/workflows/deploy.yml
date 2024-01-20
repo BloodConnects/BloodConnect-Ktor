@@ -52,3 +52,11 @@ jobs:
           version_label: ${{github.SHA}}
           region: ap-south-1
           deployment_package: RaktaCare-all.jar
+  clean:
+    needs: deploy
+    name: Clean up
+    runs-on: ubuntu-latest
+    steps:
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: artifact
