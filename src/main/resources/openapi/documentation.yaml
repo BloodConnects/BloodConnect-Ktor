@@ -19,3 +19,5 @@ paths:
               examples:
                 Example#1:
                   value: "Hello World!"
+components:
+  schemas:
