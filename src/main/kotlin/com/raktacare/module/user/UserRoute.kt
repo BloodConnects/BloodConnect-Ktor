@@ -62,10 +62,8 @@ fun Route.userRoute() {
                 if (user.uid.isNotEmpty()) {
                     userDao.getUserByUID(user.uid)?.let {
                         call.respond(BaseResponse(success = true, message = "User Login Successfully", data = it))
-                    } ?: run {
-                        call.respond(BaseResponse(success = false, message = "User Not Found", data = null))
+                        return@post
                     }
-                    return@post
                 }
                 userDao.getUserByUID(user.uid)?.let {
                     call.respond(BaseResponse(success = true, message = "User Login Successfully", data = it))
@@ -160,6 +158,7 @@ fun Route.userRoute() {
                         user.mailAddress.ifEmpty { user = user.copy(mailAddress = it.mailAddress) }
                         if(user.birthDate==0L) { user = user.copy(birthDate = it.birthDate) }
                         if(user.weight==0.0) { user = user.copy(weight = it.weight) }
+                        if (user.height==0.0) { user = user.copy(height = it.height) }
                         user.locationKey.ifEmpty { user = user.copy(locationKey = it.locationKey) }
                         user.profilePictureUrl.ifEmpty { user = user.copy(profilePictureUrl = it.profilePictureUrl) }
                         user.deviceToken.ifEmpty { user = user.copy(deviceToken = it.deviceToken) }

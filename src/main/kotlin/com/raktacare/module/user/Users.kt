@@ -11,6 +11,7 @@ object Users : Table() {
     val bloodGroup = enumeration("blood_group", User.BloodGroup::class)
     val gender = enumeration("gender", User.Gender::class)
     val weight = double("weight")
+    val height = double("height")
     val birthDate = long("birth_date")
     val locationKey = varchar("location_key", 128)
     val profilePictureUrl = varchar("profile_picture_url", 512)

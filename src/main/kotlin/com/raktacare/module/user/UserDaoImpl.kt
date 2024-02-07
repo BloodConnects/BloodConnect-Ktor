@@ -21,6 +21,7 @@ class UserDaoImpl : UserDao {
             it[gender] = user.gender
             it[birthDate] = user.birthDate
             it[weight] = user.weight
+            it[height] = user.height
             it[locationKey] = user.locationKey
             it[profilePictureUrl] = user.profilePictureUrl
             it[deviceToken] = user.deviceToken
@@ -39,6 +40,7 @@ class UserDaoImpl : UserDao {
             it[gender] = user.gender
             it[birthDate] = user.birthDate
             it[weight] = user.weight
+            it[height] = user.height
             it[locationKey] = user.locationKey
             it[profilePictureUrl] = user.profilePictureUrl
             it[deviceToken] = user.deviceToken
@@ -81,6 +83,7 @@ class UserDaoImpl : UserDao {
         gender = this[Users.gender],
         birthDate = this[Users.birthDate],
         weight = this[Users.weight],
+        height = this[Users.height],
         locationKey = this[Users.locationKey],
         profilePictureUrl = this[Users.profilePictureUrl],
         deviceToken = this[Users.deviceToken],

@@ -16,6 +16,7 @@ data class User(
     val bloodGroup: BloodGroup = BloodGroup.unknown,
     val gender: Gender = Gender.Other,
     val birthDate: Long = 0,
+    val height: Double = 0.0,
     val weight: Double = 0.0,
     val locationKey: String = "",
     val location: Location? = null,
