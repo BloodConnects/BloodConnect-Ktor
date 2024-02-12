@@ -76,12 +76,12 @@ fun Routing.updateRoute() {
 
             post {
                 try {
-                    val update = call.receive<Update>()
+                    val update = call.receive<Update>().copy(updateKey = updateDao.pushUpdateKey())
                     call.respond(
                         BaseResponse(
                             success = true,
                             message = "Update Add Successfully",
-                            data = updateDao.addUpdate(update)?.copy(updateKey = updateDao.pushUpdateKey())
+                            data = updateDao.addUpdate(update)
                         )
                     )
                 } catch (e: Exception) {
@@ -93,13 +93,17 @@ fun Routing.updateRoute() {
             put {
                 try {
                     val update = call.receive<Update>()
-                    call.respond(
-                        BaseResponse(
-                            success = true,
-                            message = "Update Update Successfully",
-                            data = updateDao.updateUpdate(update)
+                    if (updateDao.updateUpdate(update)) {
+                        call.respond(
+                            BaseResponse(
+                                success = true,
+                                message = "Update Update Successfully",
+                                data = update
+                            )
                         )
-                    )
+                    } else {
+                        call.respond(BaseResponse(success = false, message = "Update Update Failed", data = null))
+                    }
                 } catch (e: Exception) {
                     call.respond(BaseResponse(success = false, message = e.message ?: "Internal Server Error", data = null))
                     e.printStackTrace()
