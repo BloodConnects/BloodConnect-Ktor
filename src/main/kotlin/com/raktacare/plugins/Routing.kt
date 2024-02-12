@@ -3,6 +3,7 @@ package com.raktacare.plugins
 import com.raktacare.module.donor.donorRoute
 import com.raktacare.module.location.locationRoute
 import com.raktacare.module.request.requestRoute
+import com.raktacare.module.update.updateRoute
 import com.raktacare.module.user.userRoute
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -17,5 +18,6 @@ fun Application.configureRouting() {
         locationRoute()
         donorRoute()
         requestRoute()
+        updateRoute()
     }
 }

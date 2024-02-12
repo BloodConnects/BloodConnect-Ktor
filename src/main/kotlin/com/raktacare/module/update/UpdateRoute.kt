@@ -11,7 +11,7 @@ import io.ktor.server.routing.*
 
 fun Routing.updateRoute() {
     val updateDao = UpdateDao()
-    route("update") {
+    route("Update") {
         authenticate("auth-jwt") {
 
             get("All") {
