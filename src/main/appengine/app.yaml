@@ -1,0 +1,15 @@
+runtime: java11
+
+runtime_config:
+  operating_system: "ubuntu22"
+  runtime_version: "21"
+
+entrypoint: 'java -jar google-appengine-standard-1.0-SNAPSHOT-all.jar'
+
+manual_scaling:
+  instances: 1
+
+env_variables:
+  JDBC_DATABASE_URL: 'jdbc:postgresql://34.93.180.225:5432/postgres'
+  JDBC_DATABASE_USERNAME: 'postgres'
+  JDBC_DATABASE_PASSWORD: 'T]PP`QtO-E@XT~pV'

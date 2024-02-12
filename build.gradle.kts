@@ -1,7 +1,17 @@
+import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
+
 plugins {
     kotlin("jvm") version "1.9.22"
     id("io.ktor.plugin") version "2.3.7"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.google.cloud.tools.appengine") version "2.4.2"
+}
+
+ktor {
+    docker {
+        jreVersion.set(JavaVersion.VERSION_17)
+    }
 }
 
 group = "com.raktacare"
@@ -41,4 +51,14 @@ tasks {
 }
 tasks.withType<Jar> {
     destinationDirectory = File("$rootDir/output")
+}
+
+configure<AppEngineAppYamlExtension> {
+    stage {
+        setArtifact("output/${project.name}-all.jar")
+    }
+    deploy {
+        version = "GCLOUD_CONFIG"
+        projectId = "GCLOUD_CONFIG"
+    }
 }
