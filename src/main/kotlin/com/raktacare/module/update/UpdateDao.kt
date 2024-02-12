@@ -28,6 +28,7 @@ class UpdateDao {
             it[updateImage] = update.updateImage
             it[referenceKey] = update.referenceKey
             it[updateType] = update.updateType
+            it[userUid] = update.userUid
         }
         result.resultedValues?.singleOrNull()?.toUpdate()
     }
