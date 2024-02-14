@@ -1,5 +1,6 @@
 package com.raktacare.module.user
 
+import com.raktacare.module.donor.distance.DistanceResponse
 import com.raktacare.module.location.Location
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Op
@@ -20,11 +21,11 @@ data class User(
     val weight: Double = 0.0,
     val locationKey: String = "",
     val location: Location? = null,
+    val distanceInfo: DistanceResponse.DistanceInfo? = null,
     val profilePictureUrl: String = "",
     val deviceToken: String = "",
     val userToken: String = ""
 ) {
-
 
     @Serializable
     enum class Gender {
