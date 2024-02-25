@@ -61,6 +61,7 @@ fun Routing.locationRoute() {
                     } ?: run {
                         call.respond(BaseResponse(success = false, message = "Location Add Failed", data = null))
                     }
+
                 } catch (e: Exception) {
                     call.respond(BaseResponse(success = false, message = e.message ?: "Internal Server Error", data = null))
                     e.printStackTrace()

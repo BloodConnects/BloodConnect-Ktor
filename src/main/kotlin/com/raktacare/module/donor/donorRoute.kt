@@ -51,46 +51,35 @@ fun Routing.donorRoute() {
 
 suspend fun getDonors(query: DonorPagination, userDao: UserDaoImpl, locationDao: LocationDaoImpl): List<User> {
     if (query.bloodGroup != null && query.location != null) {
-        return userDao.getUserByBloodRequest(query.bloodGroup).filter { user ->
-            locationDao.getLocationByLocationKey(user.locationKey)?.let { location ->
-                location.city == query.location.city && location.state == query.location.state && location.country == query.location.country
-            } ?: run {
-                false
-            }
-        }.toPage(query).map {
-            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey), distanceInfo = getDistanceInfo(query.location, locationDao.getLocationByLocationKey(it.locationKey)))
+        return userDao.getUserByBloodRequest(query.bloodGroup).toPage(query).map {
+            it.copy(location = locationDao.getLocationByUser(it.uid), distanceInfo = getDistanceInfo(query.location, locationDao.getLocationByUser(it.uid)))
         }.toSortByDistance()
     } else if (query.bloodGroup != null) {
         return userDao.getUserByBloodRequest(query.bloodGroup).toPage(query).map {
-            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey))
+            it.copy(location = locationDao.getLocationByUser(it.uid))
         }
     } else if (query.location != null) {
-        return userDao.getUsers().filter { user ->
-            locationDao.getLocationByLocationKey(user.locationKey)?.let { location ->
-                location.city == query.location.city && location.state == query.location.state && location.country == query.location.country
-            } ?: run {
-                false
-            }
-        }.toPage(query).map {
-            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey), distanceInfo = getDistanceInfo(query.location, locationDao.getLocationByLocationKey(it.locationKey)))
+        return userDao.getUsers().toPage(query).map {
+            it.copy(location = locationDao.getLocationByUser(it.uid), distanceInfo = getDistanceInfo(query.location, locationDao.getLocationByUser(it.uid)))
         }.toSortByDistance()
     } else {
         return userDao.getUsers().toPage(query).map {
-            it.copy(location = locationDao.getLocationByLocationKey(it.locationKey))
+            it.copy(location = locationDao.getLocationByUser(it.uid))
         }
     }
 }
 
 private fun List<User>.toSortByDistance(): List<User> {
-    return sortedBy { it.distanceInfo?.distance }
+    return sortedBy { it.distanceInfo?.distance }.reversed()
 }
 
 suspend fun getDistanceInfo(fromLocation: Location, toLocation: Location?): DistanceResponse.DistanceInfo? {
-    if (toLocation == null) {
+    if (toLocation == null || fromLocation == toLocation) {
         return null
     }
+    val mapKey = System.getenv("MAP_API_KEY")
     val distanceUri =
-        "https://maps.googleapis.com/maps/api/directions/json?destination=${toLocation.latitude},${toLocation.longitude}&origin=${fromLocation.latitude},${fromLocation.longitude}&key=AIzaSyBoEK1cMECtgHIm-VBpbdBKiyeTaGiXA6o"
+        "https://maps.googleapis.com/maps/api/directions/json?destination=${toLocation.latitude},${toLocation.longitude}&origin=${fromLocation.latitude},${fromLocation.longitude}&key=$mapKey"
     val httpClient = HttpClient {
         install(ContentNegotiation) {
             json(Json {
